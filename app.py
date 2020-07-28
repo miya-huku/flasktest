@@ -27,8 +27,8 @@ def index():
 
 @app.route('/weather')
 def weather():
-    weather = "晴"
-    return render_template('weather.html', weathe_today=weather)
+    py_weather = "晴れ"
+    return render_template('weather.html', html_weather=py_weather)
 
 
 if __name__ == '__main__':
