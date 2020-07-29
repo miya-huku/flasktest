@@ -1,4 +1,4 @@
-from flask import Flask, render_template
+from flask import Flask, render_template, request, redirect
 import sqlite3
 app = Flask(__name__)
 
@@ -51,6 +51,39 @@ def dbtest():
 @app.route('/add')
 def add_get():
     return render_template('add.html')
+
+
+@app.route('/add', methods=['post'])
+def app_post():
+    py_task = request.form.get("task")
+
+    conn = sqlite3.connect('flasktest.db')
+    c = conn.cursor()
+    c.execute("INSERT INTO task VALUES (null,?)", (py_task,))
+    conn.commit()
+    conn.close()
+    return redirect('/list')
+
+
+@app.route('/list')
+def task_list():
+    # dbに接続
+    conn = sqlite3.connect('flasktest.db')
+    c = conn.cursor()
+    # SQLの命令を書く
+    c.execute("SELECT * FROM task")
+    task_list_py = []
+    for row in c.fetchall():
+        task_list_py .append({"id": row[0], "task": row[1]})
+    # DBの処理終了
+    c.close()
+    print(task_list_py)
+    return render_template('tasklist.html', task_list=task_list_py)
+
+
+@app.errorhandler(404)
+def notfound(code):
+    return "404エラーだよ☆呼び出したページは無いの"
 
 
 if __name__ == '__main__':
