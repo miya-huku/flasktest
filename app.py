@@ -112,6 +112,16 @@ def update_task():
     return redirect('/list')
 
 
+@app.route("/del/<int:id>")
+def delete(id):
+    conn = sqlite3.connect('flasktest.db')
+    c = conn.cursor()
+    c.execute("DELETE FROM task WHERE id=?", (id,))
+    conn.commit()
+    c.close()
+    return redirect('/list')
+
+
 @app.errorhandler(404)
 def notfound(code):
     return "404エラーだよ☆呼び出したページは無いの"
