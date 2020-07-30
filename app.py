@@ -122,6 +122,11 @@ def delete(id):
     return redirect('/list')
 
 
+@app.route('/regist')
+def regist_get():
+    return render_template('regist.html')
+
+
 @app.errorhandler(404)
 def notfound(code):
     return "404エラーだよ☆呼び出したページは無いの"
